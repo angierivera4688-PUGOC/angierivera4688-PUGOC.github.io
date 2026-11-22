@@ -1,4 +1,4 @@
-# Household Budget
+# HomeCount: Household Budget
 
 A simple, private household budget app. Track your fixed costs, savings goals
 and daily spending, and see how much you lose on "dead expenses" (impulse and
@@ -18,7 +18,7 @@ See the [privacy policy](privacidad.html).
 
 ---
 
-# Presupuesto del Hogar
+# HomeCount: Presupuesto del Hogar
 
 App sencilla y privada para llevar el presupuesto de tu casa: gastos fijos,
 ahorros y gasto diario, con control de gastos muertos. Tus datos se guardan

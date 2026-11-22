@@ -1,6 +1,6 @@
 {
- "name": "Mis Finanzas",
- "short_name": "Mis Finanzas",
+ "name": "HomeCount: Presupuesto del Hogar",
+ "short_name": "HomeCount",
  "description": "Controla tus gastos, gastos muertos, fijos y ahorros. Tus datos se guardan solo en tu celular.",
  "id": "./",
  "start_url": "./",
