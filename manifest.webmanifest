@@ -8,8 +8,8 @@
  "display": "standalone",
  "orientation": "portrait",
  "lang": "es",
- "background_color": "#F6EEFB",
- "theme_color": "#EFE5F8",
+ "background_color": "#F4F8F4",
+ "theme_color": "#E8F4EC",
  "categories": [
   "finance",
   "productivity"
