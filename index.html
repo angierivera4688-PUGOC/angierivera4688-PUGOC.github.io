@@ -398,5 +398,6 @@ function importJSON(inp){const f=inp.files[0];if(!f)return;const r=new FileReade
 if('serviceWorker' in navigator&&location.protocol.startsWith('http'))window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 applyTheme(S.cfg.theme);render();if(!S.cfg.theme)askTheme();
 </script>
+<script src="billing.js"></script>
 </body>
 </html>
