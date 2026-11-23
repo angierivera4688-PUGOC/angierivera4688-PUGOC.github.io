@@ -12,7 +12,7 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <title>HomeCount · Presupuesto del Hogar</title>
 <style>
-:root{--sh:185,162,224;--track:#EFE7F7;--field:#FCFAFE;--bg1:#F1E8FA;--bg2:#FBE9F1;--bg3:#E6F1FA;--pink:#F4A6BE;--pinkL:#FBDCE6;--lil:#B9A2E0;--lilL:#E9DFF7;--sky:#A9CDEF;--skyL:#DCEBF8;--mint:#AEE0C9;--mintL:#D9F1E6;--gold:#F6D98C;--ink:#4A3558;--pur:#7B4B94;--grey:#8A7A94;--card:rgba(255,255,255,.88)}
+:root{--fab1:#E6468F;--fab2:#8B4FD6;--glow:216,70,170;--sh:185,162,224;--track:#EFE7F7;--field:#FCFAFE;--bg1:#F1E8FA;--bg2:#FBE9F1;--bg3:#E6F1FA;--pink:#F4A6BE;--pinkL:#FBDCE6;--lil:#B9A2E0;--lilL:#E9DFF7;--sky:#A9CDEF;--skyL:#DCEBF8;--mint:#AEE0C9;--mintL:#D9F1E6;--gold:#F6D98C;--ink:#4A3558;--pur:#7B4B94;--grey:#8A7A94;--card:rgba(255,255,255,.88)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%}
 body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);background:linear-gradient(160deg,var(--bg1) 0%,var(--bg2) 55%,var(--bg3) 100%);background-attachment:fixed}
@@ -65,10 +65,10 @@ h2{font-size:15px;margin:22px 4px 10px;color:var(--pur)}
 .chk{width:30px;height:30px;border-radius:50%;border:2.5px solid var(--lil);background:#fff;font-size:15px;color:#fff;flex:none}
 .chk.on{background:var(--mint);border-color:var(--mint)}
 nav{position:fixed;left:0;right:0;bottom:0;max-width:480px;margin:0 auto;background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-radius:26px 26px 0 0;display:flex;justify-content:space-around;align-items:flex-end;padding:8px 6px calc(8px + env(safe-area-inset-bottom));box-shadow:0 -6px 22px rgba(var(--sh),.2);z-index:5}
-nav button{border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;color:var(--grey);padding:4px 10px;font-weight:600}
-nav button span{font-size:21px;filter:grayscale(1) opacity(.55)}
-nav button.on{color:var(--pur)}nav button.on span{filter:none}
-nav .fab{width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,var(--pink),var(--lil));color:#fff;font-size:30px;margin-top:-26px;box-shadow:0 8px 18px rgba(var(--sh),.47);justify-content:center;padding:0;line-height:1}
+nav button{border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;color:var(--grey);padding:4px 10px;font-weight:600;border-radius:18px;transition:background .25s,box-shadow .25s,color .25s}
+nav button span{font-size:22px;filter:none;transition:transform .25s,filter .25s}
+nav button.on{color:var(--pur);font-weight:800;background:rgba(var(--glow),.14);box-shadow:0 0 16px 2px rgba(var(--glow),.5),inset 0 0 0 1.5px rgba(var(--glow),.35)}nav button.on span{transform:scale(1.2);filter:drop-shadow(0 0 5px rgba(var(--glow),.95)) drop-shadow(0 0 11px rgba(var(--glow),.65))}
+nav .fab{width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,var(--fab1),var(--fab2));color:#fff;font-size:32px;font-weight:700;margin-top:-28px;box-shadow:0 8px 20px rgba(var(--glow),.6),0 0 0 4px rgba(255,255,255,.9);justify-content:center;padding:0;line-height:1}nav .fab:active{transform:scale(.94)}
 .mask{position:fixed;inset:0;background:rgba(40,30,50,.35);z-index:20;display:flex;align-items:flex-end;justify-content:center}
 .sheet{background:#fff;width:100%;max-width:480px;border-radius:28px 28px 0 0;padding:18px 18px calc(22px + env(safe-area-inset-bottom));max-height:92vh;overflow:auto;animation:up .22s ease}
 @keyframes up{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
@@ -106,10 +106,10 @@ const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;'
 const sum=(a,k)=>a.reduce((t,x)=>t+(+x[k]||0),0);
 let S=load();
 const THEMES={
- fucsia:{n:'Fucsia',s:'Tono para mujer',v:{'--pink':'#F4A6BE','--pinkL':'#FBDCE6','--lil':'#B9A2E0','--lilL':'#E9DFF7','--sky':'#A9CDEF','--skyL':'#DCEBF8','--mint':'#AEE0C9','--mintL':'#D9F1E6','--ink':'#4A3558','--pur':'#7B4B94','--grey':'#8A7A94','--track':'#EFE7F7','--field':'#FCFAFE','--sh':'185,162,224','--bg1':'#F1E8FA','--bg2':'#FBE9F1','--bg3':'#E6F1FA'},tc:'#EFE5F8',ic:['#F4A6BE','#B9A2E0']},
- azul:{n:'Azul',s:'Tono para hombre',v:{'--pink':'#F0A3A3','--pinkL':'#F9DADA','--lil':'#7FA6E0','--lilL':'#DCE8F8','--sky':'#8FD0E6','--skyL':'#D8EFF7','--mint':'#A8DCC8','--mintL':'#D6F0E6','--ink':'#1F3350','--pur':'#24508F','--grey':'#6F8099','--track':'#E4ECF7','--field':'#F7FAFE','--sh':'95,143,208','--bg1':'#EAF1FB','--bg2':'#E6F4FA','--bg3':'#F1F5FB'},tc:'#EAF1FB',ic:['#8FD0E6','#5F8FD0']},
- verde:{n:'Verde',s:'Unisex',v:{'--pink':'#F4A9A0','--pinkL':'#FBDDD8','--lil':'#7DC9A0','--lilL':'#DAF1E4','--sky':'#A6D8D0','--skyL':'#DDF1EE','--mint':'#B7DD8E','--mintL':'#E6F3D3','--ink':'#1F4235','--pur':'#2E7D5B','--grey':'#6E8A7C','--track':'#E3F1E9','--field':'#F7FCF9','--sh':'95,176,136','--bg1':'#E9F6EE','--bg2':'#F4FAEA','--bg3':'#E6F3F0'},tc:'#E9F6EE',ic:['#B7DD8E','#5FB088']},
- naranja:{n:'Naranja',s:'Unisex',v:{'--pink':'#EE8FA3','--pinkL':'#FADCE3','--lil':'#F5A25D','--lilL':'#FDE6D0','--sky':'#F7C77E','--skyL':'#FDEFD0','--mint':'#A7D9A0','--mintL':'#DDF1D8','--ink':'#4A2E1B','--pur':'#B5561E','--grey':'#8F7766','--track':'#F7EADD','--field':'#FFFAF5','--sh':'224,160,96','--bg1':'#FDF0E3','--bg2':'#FBE8DD','--bg3':'#FFF6E0'},tc:'#FDF0E3',ic:['#F7C77E','#F08A3C']}
+ fucsia:{n:'Fucsia',s:'Tono para mujer',v:{'--pink':'#F4A6BE','--pinkL':'#FBDCE6','--lil':'#B9A2E0','--lilL':'#E9DFF7','--sky':'#A9CDEF','--skyL':'#DCEBF8','--mint':'#AEE0C9','--mintL':'#D9F1E6','--ink':'#4A3558','--pur':'#7B4B94','--grey':'#8A7A94','--track':'#EFE7F7','--field':'#FCFAFE','--sh':'185,162,224','--bg1':'#F1E8FA','--bg2':'#FBE9F1','--bg3':'#E6F1FA','--fab1':'#E6468F','--fab2':'#8B4FD6','--glow':'216,70,170'},tc:'#EFE5F8',ic:['#F4A6BE','#B9A2E0']},
+ azul:{n:'Azul',s:'Tono para hombre',v:{'--pink':'#F0A3A3','--pinkL':'#F9DADA','--lil':'#7FA6E0','--lilL':'#DCE8F8','--sky':'#8FD0E6','--skyL':'#D8EFF7','--mint':'#A8DCC8','--mintL':'#D6F0E6','--ink':'#1F3350','--pur':'#24508F','--grey':'#6F8099','--track':'#E4ECF7','--field':'#F7FAFE','--sh':'95,143,208','--bg1':'#EAF1FB','--bg2':'#E6F4FA','--bg3':'#F1F5FB','--fab1':'#2F86F0','--fab2':'#1B4DB0','--glow':'47,134,240'},tc:'#EAF1FB',ic:['#8FD0E6','#5F8FD0']},
+ verde:{n:'Verde',s:'Unisex',v:{'--pink':'#F4A9A0','--pinkL':'#FBDDD8','--lil':'#7DC9A0','--lilL':'#DAF1E4','--sky':'#A6D8D0','--skyL':'#DDF1EE','--mint':'#B7DD8E','--mintL':'#E6F3D3','--ink':'#1F4235','--pur':'#2E7D5B','--grey':'#6E8A7C','--track':'#E3F1E9','--field':'#F7FCF9','--sh':'95,176,136','--bg1':'#E9F6EE','--bg2':'#F4FAEA','--bg3':'#E6F3F0','--fab1':'#2BB673','--fab2':'#16774F','--glow':'43,182,115'},tc:'#E9F6EE',ic:['#B7DD8E','#5FB088']},
+ naranja:{n:'Naranja',s:'Unisex',v:{'--pink':'#EE8FA3','--pinkL':'#FADCE3','--lil':'#F5A25D','--lilL':'#FDE6D0','--sky':'#F7C77E','--skyL':'#FDEFD0','--mint':'#A7D9A0','--mintL':'#DDF1D8','--ink':'#4A2E1B','--pur':'#B5561E','--grey':'#8F7766','--track':'#F7EADD','--field':'#FFFAF5','--sh':'224,160,96','--bg1':'#FDF0E3','--bg2':'#FBE8DD','--bg3':'#FFF6E0','--fab1':'#F58A25','--fab2':'#D14F17','--glow':'245,138,37'},tc:'#FDF0E3',ic:['#F7C77E','#F08A3C']}
 };
 const cv=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim()||'#999';
 function makeIcon(a,b){
@@ -424,7 +424,7 @@ function openSettings(){
   <input id="impc" type="file" accept=".csv,text/csv,text/plain" style="display:none" onchange="importCSVFile(this)">
   <button class="btn del" style="margin-top:10px" onclick="if(confirm('¿Borrar TODOS tus datos?')){S=fresh();save();closeSheet();render()}">Borrar todo</button>
   <p style="font-size:12px;color:var(--grey);margin:16px 2px 0">📲 Para usarla como app: en Chrome abre el menú ⋮ → <b>Añadir a pantalla de inicio</b>. En iPhone (Safari): Compartir → <b>Añadir a inicio</b>.</p>
-  <p style="font-size:12px;color:var(--grey);text-align:center;margin:14px 0 0">HomeCount v1.0.8</p>`)
+  <p style="font-size:12px;color:var(--grey);text-align:center;margin:14px 0 0">HomeCount v1.0.9</p>`)
 }
 function saveCfg(){S.cfg.cur=val('s_c')||'S/';S.cfg.meta=parseFloat(val('s_m'))||0;S.cfg.tope=parseFloat(val('s_t'))||0;S.cfg.pday=parseInt(val('s_pd'))||1;ui.ym=ymOf(todayStr());save();closeSheet();render();toast('Ajustes guardados')}
 const isWV=()=>/; wv\)/.test(navigator.userAgent);
