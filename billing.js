@@ -2,6 +2,7 @@
    Solo se activa dentro de la app instalada desde Google Play (TWA).
    En el navegador normal no bloquea nada. */
 (function(){
+  var ENABLED=false;   // false = app abierta sin cobro (modo prueba). Cambiar a true para activar el paywall.
   var SVC='https://play.google.com/billing';
   var SKUS=['homecount_anual','homecount_mensual'];   // IDs de suscripción en Play Console
   var LIFE='homecount_vida';                          // ID del producto único (de por vida)
@@ -133,7 +134,7 @@
       {itemId:'homecount_vida',price:{currency:'PEN',value:'199.00'}}]);
     return;
   }
-  if(!inTWA())return;
+  if(!ENABLED||!inTWA())return;
   var ok0=readOk();
   if(!(lsGet(LKEY)==='1'||(ok0&&Date.now()-ok0<GRACE))){document.body.style.overflow='hidden';el.style.display='block';el.innerHTML='<div class="w"><img src="icon-192.png" width="96" height="96" alt="" style="border-radius:24px"><p>Cargando…</p></div>'}
   check(false);
