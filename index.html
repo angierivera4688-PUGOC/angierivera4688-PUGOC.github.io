@@ -385,7 +385,8 @@ function openSettings(){
   <input id="imp" type="file" accept=".json,application/json" style="display:none" onchange="importJSON(this)">
   <button class="btn sec" style="margin-top:10px" onclick="exportCSV()">📄 Exportar gastos (CSV para Excel)</button>
   <button class="btn del" style="margin-top:10px" onclick="if(confirm('¿Borrar TODOS tus datos?')){S=fresh();save();closeSheet();render()}">Borrar todo</button>
-  <p style="font-size:12px;color:var(--grey);margin:16px 2px 0">📲 Para usarla como app: en Chrome abre el menú ⋮ → <b>Añadir a pantalla de inicio</b>. En iPhone (Safari): Compartir → <b>Añadir a inicio</b>.</p>`)
+  <p style="font-size:12px;color:var(--grey);margin:16px 2px 0">📲 Para usarla como app: en Chrome abre el menú ⋮ → <b>Añadir a pantalla de inicio</b>. En iPhone (Safari): Compartir → <b>Añadir a inicio</b>.</p>
+  <p style="font-size:12px;color:var(--grey);text-align:center;margin:14px 0 0">HomeCount v1.0.4 · build 10</p>`)
 }
 function saveCfg(){S.cfg.cur=val('s_c')||'S/';S.cfg.meta=parseFloat(val('s_m'))||0;S.cfg.tope=parseFloat(val('s_t'))||0;save();closeSheet();render();toast('Ajustes guardados')}
 function dl(name,text,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500)}
