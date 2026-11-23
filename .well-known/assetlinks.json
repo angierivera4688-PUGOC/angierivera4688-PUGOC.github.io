@@ -3,6 +3,9 @@
   "target": {
     "namespace": "android_app",
     "package_name": "com.homecount.app",
-    "sha256_cert_fingerprints": ["EE:37:59:7D:00:F9:95:05:23:5C:FE:72:93:89:27:A8:18:D4:B2:69:F4:0F:BB:93:81:30:77:15:8E:FD:EE:E4"]
+    "sha256_cert_fingerprints": [
+      "DB:0D:03:E8:9C:0F:F8:4E:93:BC:06:9C:6B:FB:28:C8:60:0B:8C:68:D2:D9:5F:00:35:EF:36:4A:3F:CE:F2:FB",
+      "EE:37:59:7D:00:F9:95:05:23:5C:FE:72:93:89:27:A8:18:D4:B2:69:F4:0F:BB:93:81:30:77:15:8E:FD:EE:E4"
+    ]
   }
 }]
