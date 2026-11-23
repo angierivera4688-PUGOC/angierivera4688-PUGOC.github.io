@@ -4,7 +4,9 @@
 (function(){
   var SVC='https://play.google.com/billing';
   var SKUS=['homecount_anual','homecount_mensual'];   // IDs de suscripción en Play Console
-  var KEY='hc_bill_v1', GRACE=7*864e5, FRESH=864e5;
+  var LIFE='homecount_vida';                          // ID del producto único (de por vida)
+  var ORDER=['homecount_anual','homecount_mensual',LIFE];
+  var KEY='hc_bill_v1', LKEY='hc_life_v1', GRACE=7*864e5, FRESH=864e5;
   var svc=null, busy=false;
 
   function lsGet(k){try{return localStorage.getItem(k)}catch(e){return null}}
@@ -60,11 +62,11 @@
       '<ul><li>✅ Gastos fijos, suscripciones y deudas</li><li>✅ Gastos muertos y metas de ahorro</li><li>✅ Tus datos quedan en tu celular</li></ul>';
     if(items&&items.length){
       items.forEach(function(d){
-        var anual=d.itemId.indexOf('anual')>-1;
-        var tr=trialTxt(d.freeTrialPeriod);
+        var anual=d.itemId.indexOf('anual')>-1, vida=d.itemId===LIFE;
+        var tr=vida?'':trialTxt(d.freeTrialPeriod);
         html+='<button class="pl'+(anual?' best':'')+'" data-sku="'+d.itemId+'">'+(anual?'<i class="tag">Mejor precio</i>':'')+
-          '<b>'+(anual?'Anual':'Mensual')+' · '+money(d.price)+(periodTxt(d.subscriptionPeriod)?' / '+periodTxt(d.subscriptionPeriod):'')+'</b>'+
-          '<span>'+(tr?tr+', luego se cobra '+money(d.price):'Suscripción')+'</span></button>';
+          '<b>'+(vida?'De por vida · '+money(d.price):(anual?'Anual':'Mensual')+' · '+money(d.price)+(periodTxt(d.subscriptionPeriod)?' / '+periodTxt(d.subscriptionPeriod):''))+'</b>'+
+          '<span>'+(vida?'Pago único, sin renovaciones. Es tuya para siempre.':(tr?tr+', luego se cobra '+money(d.price):'Suscripción'))+'</span></button>';
       });
     }else{
       html+='<p>'+(note||'No pude conectar con Google Play. Revisa tu internet y vuelve a intentar.')+'</p>';
@@ -94,9 +96,9 @@
       var token=r.details&&r.details.purchaseToken;
       if(token){try{await s.acknowledge(token,'onetime')}catch(e){}}
       await r.complete('success');
-      writeOk(Date.now());hide();
+      writeOk(Date.now());if(sku===LIFE)lsSet(LKEY,'1');hide();
     }catch(e){
-      msg(e&&e.name==='AbortError'?'':'No se completó la suscripción. Intenta de nuevo.');
+      msg(e&&e.name==='AbortError'?'':'No se completó la compra. Intenta de nuevo.');
     }
     busy=false;
   }
@@ -105,19 +107,21 @@
     if(!manual&&ok&&Date.now()-ok<FRESH){hide();return}
     var s=await getSvc();
     if(!s){
-      if(ok&&Date.now()-ok<GRACE){hide();return}
+      if(lsGet(LKEY)==='1'||(ok&&Date.now()-ok<GRACE)){hide();return}
       show(null);return;
     }
     try{
       var list=await s.listPurchases();
-      var act=list.some(function(p){return SKUS.indexOf(p.itemId)>-1});
+      var hasLife=list.some(function(p){return p.itemId===LIFE});
+      var act=hasLife||list.some(function(p){return SKUS.indexOf(p.itemId)>-1});
+      if(hasLife)lsSet(LKEY,'1');else{try{localStorage.removeItem(LKEY)}catch(e){}}
       if(act){writeOk(Date.now());hide();return}
       writeOk(0);
-      var d=await s.getDetails(SKUS);
-      d.sort(function(a,b){return a.itemId<b.itemId?-1:1});
+      var d=await s.getDetails(SKUS.concat([LIFE]));
+      d.sort(function(a,b){return ORDER.indexOf(a.itemId)-ORDER.indexOf(b.itemId)});
       show(d);if(manual)msg('No encontré una suscripción activa.');
     }catch(e){
-      if(ok&&Date.now()-ok<GRACE){hide();return}
+      if(lsGet(LKEY)==='1'||(ok&&Date.now()-ok<GRACE)){hide();return}
       show(null);
     }
   }
@@ -125,12 +129,13 @@
   if(location.hash==='#hcdemo'){ // vista previa de la pantalla, sin cobrar
     show([
       {itemId:'homecount_anual',price:{currency:'PEN',value:'79.00'},subscriptionPeriod:'P1Y',freeTrialPeriod:'P1M'},
-      {itemId:'homecount_mensual',price:{currency:'PEN',value:'9.90'},subscriptionPeriod:'P1M',freeTrialPeriod:'P1M'}]);
+      {itemId:'homecount_mensual',price:{currency:'PEN',value:'9.90'},subscriptionPeriod:'P1M',freeTrialPeriod:'P1M'},
+      {itemId:'homecount_vida',price:{currency:'PEN',value:'199.00'}}]);
     return;
   }
   if(!inTWA())return;
   var ok0=readOk();
-  if(!(ok0&&Date.now()-ok0<GRACE)){document.body.style.overflow='hidden';el.style.display='block';el.innerHTML='<div class="w"><img src="icon-192.png" width="96" height="96" alt="" style="border-radius:24px"><p>Cargando…</p></div>'}
+  if(!(lsGet(LKEY)==='1'||(ok0&&Date.now()-ok0<GRACE))){document.body.style.overflow='hidden';el.style.display='block';el.innerHTML='<div class="w"><img src="icon-192.png" width="96" height="96" alt="" style="border-radius:24px"><p>Cargando…</p></div>'}
   check(false);
   document.addEventListener('visibilitychange',function(){if(!document.hidden&&inTWA())check(false)});
 })();
