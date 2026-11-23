@@ -417,19 +417,29 @@ function openSettings(){
   <h3 style="margin-top:22px">💾 Respaldo</h3>
   <p style="font-size:12.5px;color:var(--grey);margin:0 0 10px">Tus datos se guardan solo en este celular. Descarga un respaldo para pasarlos a otro dispositivo o por seguridad.</p>
   <div class="two"><button class="btn sec" onclick="exportJSON()">⬇️ Descargar</button><button class="btn sec" onclick="document.getElementById('imp').click()">⬆️ Importar</button></div>
+  <button class="btn sec" style="margin-top:10px" onclick="openPaste()">📋 Pegar respaldo (si no abre archivos)</button>
   <input id="imp" type="file" accept=".json,application/json" style="display:none" onchange="importJSON(this)">
   <button class="btn sec" style="margin-top:10px" onclick="exportCSV()">📄 Exportar gastos (CSV para Excel)</button>
   <button class="btn del" style="margin-top:10px" onclick="if(confirm('¿Borrar TODOS tus datos?')){S=fresh();save();closeSheet();render()}">Borrar todo</button>
   <p style="font-size:12px;color:var(--grey);margin:16px 2px 0">📲 Para usarla como app: en Chrome abre el menú ⋮ → <b>Añadir a pantalla de inicio</b>. En iPhone (Safari): Compartir → <b>Añadir a inicio</b>.</p>
-  <p style="font-size:12px;color:var(--grey);text-align:center;margin:14px 0 0">HomeCount v1.0.6</p>`)
+  <p style="font-size:12px;color:var(--grey);text-align:center;margin:14px 0 0">HomeCount v1.0.7</p>`)
 }
 function saveCfg(){S.cfg.cur=val('s_c')||'S/';S.cfg.meta=parseFloat(val('s_m'))||0;S.cfg.tope=parseFloat(val('s_t'))||0;S.cfg.pday=parseInt(val('s_pd'))||1;ui.ym=ymOf(todayStr());save();closeSheet();render();toast('Ajustes guardados')}
-function dl(name,text,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500)}
+const isWV=()=>/; wv\)/.test(navigator.userAgent);
+function textSheet(title,text,hint){window._tx=text;
+  sheet(`<h3>${title}</h3><p style="font-size:12.5px;color:var(--grey);margin:0 0 10px">${hint}</p><textarea id="txa" readonly style="width:100%;height:190px;border:2px solid var(--track);background:var(--field);border-radius:14px;padding:10px;font-size:12px;color:var(--ink);font-family:monospace">${esc(text)}</textarea><div class="two" style="margin-top:12px"><button class="btn sec" onclick="closeSheet()">Cerrar</button><button class="btn" onclick="copyTx()">📋 Copiar todo</button></div>`)}
+function copyTx(){const t=window._tx||'',ok=()=>toast('Copiado ✨ Pégalo en Notas, WhatsApp o un correo'),fb=()=>{const a=document.getElementById('txa');if(!a)return;a.removeAttribute('readonly');a.focus();a.select();try{document.execCommand('copy')?ok():toast('Mantén presionado el texto y elige Copiar')}catch(e){toast('Mantén presionado el texto y elige Copiar')}a.setAttribute('readonly','')};
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(ok,fb);else fb()}
+function dl(name,text,type){
+  if(isWV()){textSheet('📄 '+name,text,'Esta app no puede guardar archivos directamente. Toca <b>Copiar todo</b> y pégalo en Notas, WhatsApp o un correo. Si es el CSV, guárdalo con extensión .csv para abrirlo en Excel.');return}
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500)}
 function exportJSON(){dl('respaldo_finanzas_'+todayStr()+'.json',JSON.stringify(S),'application/json')}
 function exportCSV(){const q=s=>'"'+String(s==null?'':s).replace(/"/g,'""')+'"';
   const rows=['Fecha,Concepto,Monto,Categoria,Tipo'].concat(S.gas.sort((a,b)=>a.date.localeCompare(b.date)).map(x=>[x.date,q(x.desc),x.amt,q(x.cat),x.tipo==='M'?'Muerto':'Necesario'].join(',')));
   dl('gastos_'+todayStr()+'.csv','﻿'+rows.join('\n'),'text/csv')}
-function importJSON(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!d.cfg||!d.gas)throw 0;S=d;save();closeSheet();render();toast('Datos importados ✨')}catch(e){toast('Ese archivo no es un respaldo válido')}};r.readAsText(f)}
+function applyImport(txt){try{const d=JSON.parse(txt);if(!d.cfg||!d.gas)throw 0;S=d;save();closeSheet();ui.ym=ymOf(todayStr());render();toast('Datos importados ✨')}catch(e){toast('Ese texto no es un respaldo válido')}}
+function importJSON(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=()=>applyImport(r.result);r.readAsText(f)}
+function openPaste(){sheet(`<h3>📋 Pegar respaldo</h3><p style="font-size:12.5px;color:var(--grey);margin:0 0 10px">Pega aquí el texto de tu respaldo (empieza con <b>{</b>). Reemplazará los datos actuales.</p><textarea id="pt" placeholder="Pega aquí…" style="width:100%;height:190px;border:2px solid var(--track);background:var(--field);border-radius:14px;padding:10px;font-size:12px;color:var(--ink);font-family:monospace"></textarea><div class="two" style="margin-top:12px"><button class="btn sec" onclick="closeSheet()">Cancelar</button><button class="btn" onclick="applyImport(val('pt'))">Importar</button></div>`)}
 
 if('serviceWorker' in navigator&&location.protocol.startsWith('http'))window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 /* botón atrás del teléfono: primero cierra la hoja o vuelve a Inicio; solo sale desde Inicio */
