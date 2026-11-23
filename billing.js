@@ -19,16 +19,16 @@
   function readOk(){var n=parseInt(lsGet(KEY),10);return isNaN(n)?0:n}
   function writeOk(t){lsSet(KEY,String(t))}
 
-  var css='#hcpw{position:fixed;inset:0;z-index:99999;display:none;overflow:auto;background:linear-gradient(180deg,var(--bg1,#F4F8F4),var(--bg2,#E8F4EC));font-family:inherit;color:var(--ink,#1F4235)}'+
+  var css='#hcpw{position:fixed;inset:0;z-index:99999;display:none;overflow:auto;background:linear-gradient(160deg,#E9F6EE,#F4FAEA 55%,#E6F3F0);font-family:inherit;color:#1F4235}'+
   '#hcpw .w{max-width:440px;margin:0 auto;padding:36px 22px 40px;text-align:center}'+
-  '#hcpw h1{font-size:26px;margin:8px 0 6px;color:var(--pur,#2E7D5B)}'+
-  '#hcpw p{font-size:15px;line-height:1.45;margin:6px 0;color:var(--grey,#6E8A7C)}'+
-  '#hcpw .pl{display:block;width:100%;box-sizing:border-box;margin:12px 0 0;padding:16px;border:2px solid var(--lil,#7DC9A0);border-radius:20px;background:var(--card,#fff);color:inherit;font:inherit;text-align:left;cursor:pointer;position:relative}'+
-  '#hcpw .pl.best{border-color:var(--pur,#2E7D5B);background:var(--lilL,#DAF1E4)}'+
+  '#hcpw h1{font-size:26px;margin:8px 0 6px;color:#2E7D5B}'+
+  '#hcpw p{font-size:15px;line-height:1.45;margin:6px 0;color:#6E8A7C}'+
+  '#hcpw .pl{display:block;width:100%;box-sizing:border-box;margin:12px 0 0;padding:16px;border:2px solid #7DC9A0;border-radius:20px;background:#fff;color:inherit;font:inherit;text-align:left;cursor:pointer;position:relative}'+
+  '#hcpw .pl.best{border-color:#2E7D5B;background:#DAF1E4}'+
   '#hcpw .pl b{font-size:18px;display:block}'+
-  '#hcpw .pl span{font-size:14px;color:var(--grey,#6E8A7C)}'+
-  '#hcpw .tag{position:absolute;top:-11px;right:14px;background:var(--pur,#2E7D5B);color:#fff;font-size:12px;font-weight:700;padding:3px 10px;border-radius:99px}'+
-  '#hcpw .lk{display:inline-block;margin:16px 8px 0;font-size:14px;color:var(--pur,#2E7D5B);text-decoration:underline;background:none;border:0;font-family:inherit;cursor:pointer}'+
+  '#hcpw .pl span{font-size:14px;color:#6E8A7C}'+
+  '#hcpw .tag{position:absolute;top:-11px;right:14px;background:#2E7D5B;color:#fff;font-size:12px;font-weight:700;padding:3px 10px;border-radius:99px}'+
+  '#hcpw .lk{display:inline-block;margin:16px 8px 0;font-size:14px;color:#2E7D5B;text-decoration:underline;background:none;border:0;font-family:inherit;cursor:pointer}'+
   '#hcpw .msg{min-height:20px;font-size:14px;color:#B04A5A;margin-top:10px}'+
   '#hcpw ul{list-style:none;padding:0;margin:14px 0 6px;text-align:left;font-size:15px}'+
   '#hcpw li{padding:4px 0}';
