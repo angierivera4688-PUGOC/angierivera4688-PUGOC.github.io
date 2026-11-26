@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
+<meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#EFE5F8">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -97,6 +98,16 @@ input:focus,select:focus{outline:0;border-color:var(--lil)}
 .cal .cf{display:flex;justify-content:space-between;gap:6px;padding:4px 12px 14px}.cal .cf button{border:0;background:none;color:#d8d8dd;font-family:inherit;font-weight:800;font-size:15px;padding:10px 12px;border-radius:12px}.cal .cf button.ok{color:#fff;background:rgba(255,255,255,.16)}
 @media(max-height:560px){.cal .cg button{max-width:32px;font-size:13px}.cal .cg i{padding:3px 0}.cal .ch{padding:12px 16px!important}.cal .cb{padding:6px 12px 2px}.cal .cn button{height:32px}.cal .cf{padding-bottom:8px!important}}
 @media(min-width:560px){.cal{flex-direction:row;flex-wrap:wrap}.cal .ch{width:36%;padding:24px 20px}.cal .ch b{font-size:30px}.cal .cb{width:64%}.cal .cf{width:100%;justify-content:flex-end;padding-left:36%}}
+html[data-dark]{color-scheme:dark}
+html[data-dark] .sheet,html[data-dark] .tcard,html[data-dark] .rc button,html[data-dark] .chk{background:#261e30}
+html[data-dark] nav{background:rgba(28,21,38,.96)}
+html[data-dark] .seg button.on{background:#3b3049;color:var(--ink)}
+html[data-dark] .ok{color:#8FE0B8}html[data-dark] .warn{background:#4a3d17;color:#F6D98C}html[data-dark] .bad{color:#FFB3C6}
+html[data-dark] [style*="#FFF6DD"]{background:#3d3524!important}
+html[data-dark] [style*="color:#B0435F"],html[data-dark] [style*="color:#A03A5A"],html[data-dark] [style*="color:#7e2a44"]{color:#FF9DB5!important}
+html[data-dark] [style*="color:#2F8F5B"],html[data-dark] [style*="color:#2D7A5B"],html[data-dark] [style*="color:#27644B"]{color:#7FDDB0!important}
+html[data-dark] [style*="color:#333"],html[data-dark] [style*="color:#777"]{color:var(--ink)!important}
+html[data-dark] input,html[data-dark] select,html[data-dark] textarea{color:var(--ink);background:var(--field)}
 .dtf{position:relative;display:flex;gap:8px}.dtf>input:first-child{flex:1;min-width:0}.dtb{border:0;background:var(--lilL);border-radius:14px;width:54px;font-size:22px;flex:none}
 .themes{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px}.tcard{border:3px solid transparent;background:#fff;border-radius:22px;padding:12px;text-align:center;box-shadow:0 6px 16px rgba(0,0,0,.08);font-family:inherit}.tcard.on{border-color:var(--lil)}.tcard b{display:block;font-size:15px;margin-top:8px;color:#333}.tcard small{color:#777;font-size:11.5px}.sw{display:flex;height:54px;border-radius:14px;overflow:hidden}.sw i{flex:1}.full{position:fixed;inset:0;z-index:40;overflow:auto;padding:calc(env(safe-area-inset-top) + 36px) 18px 30px;background:linear-gradient(160deg,var(--bg1),var(--bg2) 55%,var(--bg3))}.full .in{max-width:480px;margin:0 auto}#toast{position:fixed;left:50%;bottom:110px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:14px;font-size:13px;z-index:30;opacity:0;transition:.25s;pointer-events:none;max-width:86%;text-align:center}
 #toast.on{opacity:1}
@@ -139,12 +150,24 @@ function makeIcon(a,b){
   x.fillStyle='#fff';x.fillRect(86,78,8,24);x.fillRect(78,80,24,5);x.fillRect(78,93,24,5);
   return c.toDataURL('image/png')
 }
+const hx=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));
+const mixc=(a,b,t)=>{const x=hx(a),y=hx(b);return'#'+x.map((v,i)=>Math.round(v*(1-t)+y[i]*t).toString(16).padStart(2,'0')).join('')};
+function isDark(){const m=S.cfg.mode||'auto';return m==='dark'||(m==='auto'&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)}
 function applyTheme(k){
-  const t=THEMES[k]||THEMES.fucsia,r=document.documentElement;
+  const t=THEMES[k]||THEMES.fucsia,r=document.documentElement,d=isDark();
   Object.entries(t.v).forEach(([a,b])=>r.style.setProperty(a,b));
-  const m=document.querySelector('meta[name=theme-color]');if(m)m.content=t.tc;
-  
+  let tc=t.tc;
+  if(d){const v=t.v;
+    ['--pinkL','--lilL','--skyL','--mintL'].forEach(n=>r.style.setProperty(n,mixc(v[n],'#1c1526',.74)));
+    r.style.setProperty('--pur',mixc(v['--pur'],'#ffffff',.5));
+    r.style.setProperty('--lil',mixc(v['--lil'],'#000000',.12));
+    [['--ink','#EFE8F6'],['--grey','#A99DB8'],['--track','#32283d'],['--field','#261e30'],['--sh','0,0,0'],['--bg1','#17111f'],['--bg2','#1b1424'],['--bg3','#121722'],['--card','rgba(38,30,48,.92)']].forEach(([a,b])=>r.style.setProperty(a,b));
+    r.setAttribute('data-dark','');tc='#17111f'
+  }else{r.removeAttribute('data-dark');r.style.setProperty('--card','rgba(255,255,255,.88)')}
+  const m=document.querySelector('meta[name=theme-color]');if(m)m.content=tc;
 }
+try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{if((S.cfg.mode||'auto')==='auto'){applyTheme(S.cfg.theme);render()}})}catch(e){}
+function setMode(v){S.cfg.mode=v;save();applyTheme(S.cfg.theme);render();const sg=document.getElementById('modeseg');if(sg)Array.prototype.forEach.call(sg.children,(b,k)=>b.classList.toggle('on',['auto','light','dark'][k]===v));toast('Apariencia: '+({auto:'automática',light:'clara',dark:'oscura'}[v]))}
 function themeCards(cur){return Object.entries(THEMES).map(([k,t])=>`<button class="tcard ${k===cur?'on':''}" onclick="pickTheme('${k}')"><div class="sw"><i style="background:${t.v['--lil']}"></i><i style="background:${t.v['--sky']}"></i><i style="background:${t.v['--mint']}"></i><i style="background:${t.v['--pink']}"></i></div><b>${t.n}</b><small>${t.s}</small></button>`).join('')}
 function pickTheme(k){S.cfg.theme=k;save();applyTheme(k);const f=document.getElementById('full');if(f)f.remove();closeSheet();render();toast('Estilo '+THEMES[k].n+' ✨')}
 function askTheme(){
@@ -500,6 +523,7 @@ function openSettings(){
   <p style="font-size:12px;color:var(--grey);margin:6px 2px 0">Si te pagan el 25, elige 25: tu periodo irá del 25 al 24 del mes siguiente y los ingresos y gastos se cuentan dentro de ese rango.</p>
   <button class="btn" style="margin-top:14px" onclick="saveCfg()">Guardar ajustes</button>
   <h3 style="margin-top:22px">🎨 Estilo</h3><div class="themes">${themeCards(S.cfg.theme)}</div>
+  <label style="margin-top:16px">Apariencia</label><div class="seg" id="modeseg">${[['auto','Automático'],['light','Claro'],['dark','Oscuro']].map(([k,n])=>`<button class="${(S.cfg.mode||'auto')===k?'on':''}" onclick="setMode('${k}')">${n}</button>`).join('')}</div>
   <label style="margin-top:16px">Orden de las categorías</label><div class="seg" id="sortseg"><button class="${S.cfg.sortCats?'':'on'}" onclick="setSort(0)">Como las creé</button><button class="${S.cfg.sortCats?'on':''}" onclick="setSort(1)">De la A a la Z</button></div>
   <h3 style="margin-top:22px">💾 Respaldo</h3>
   <p style="font-size:12.5px;color:var(--grey);margin:0 0 10px">Tus datos se guardan solo en este celular. Descarga un respaldo para pasarlos a otro dispositivo o por seguridad.</p>
@@ -511,7 +535,7 @@ function openSettings(){
   <input id="impc" type="file" accept=".csv,text/csv,text/plain" style="display:none" onchange="importCSVFile(this)">
   <button class="btn del" style="margin-top:10px" onclick="if(confirm('¿Borrar TODOS tus datos?')){S=fresh();save();closeSheet();render()}">Borrar todo</button>
   <p style="font-size:12px;color:var(--grey);margin:16px 2px 0">📲 Para usarla como app: en Chrome abre el menú ⋮ → <b>Añadir a pantalla de inicio</b>. En iPhone (Safari): Compartir → <b>Añadir a inicio</b>.</p>
-  <p style="font-size:12px;color:var(--grey);text-align:center;margin:14px 0 0">HomeCount v1.0.16</p>`)
+  <p style="font-size:12px;color:var(--grey);text-align:center;margin:14px 0 0">HomeCount v1.0.17</p>`)
 }
 function saveCfg(){S.cfg.cur=val('s_c')||'S/';S.cfg.meta=parseFloat(val('s_m'))||0;S.cfg.tope=parseFloat(val('s_t'))||0;S.cfg.pday=parseInt(val('s_pd'))||1;ui.ym=ymOf(todayStr());save();closeSheet();render();toast('Ajustes guardados')}
 const isWV=()=>/; wv\)/.test(navigator.userAgent);
