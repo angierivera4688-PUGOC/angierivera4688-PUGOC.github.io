@@ -60,7 +60,7 @@
     document.body.style.overflow='hidden';el.style.display='block';
     var html='<div class="w"><img src="icon-192.png" width="96" height="96" alt="" style="border-radius:24px"><h1>HomeCount</h1>'+
       '<p><b>Empieza tu mes gratis</b> y ordena tus cuentas. Cancela cuando quieras desde Google Play.</p>'+
-      '<ul><li>✅ Gastos fijos, suscripciones y deudas</li><li>✅ Gastos muertos y metas de ahorro</li><li>✅ Tus datos quedan en tu celular</li></ul>';
+      '<ul><li>✅ Gastos fijos, suscripciones y deudas</li><li>✅ Gastos Hormiga y metas de ahorro</li><li>✅ Tus datos quedan en tu celular</li></ul>';
     if(items&&items.length){
       items.forEach(function(d){
         var anual=d.itemId.indexOf('anual')>-1, vida=d.itemId===LIFE;

@@ -205,7 +205,7 @@ function viewHome(){
     return`<div class="row" onclick="editCat(${i})"><div class="ico">${k.i}</div><div class="grow"><b>${esc(k.n)}</b><div class="bar"><i class="${p>100?'over':''}" style="width:${Math.min(p,100)}%"></i></div></div><div class="amt" style="text-align:right">${money(sp)}<br><small style="color:var(--grey);font-weight:500">de ${k.b>0?money(k.b):'sin límite'}</small></div></div>`}).join('');
   return`
   <div class="card">${ring(c)}
-    <div class="legend"><span><i style="background:var(--lil)"></i>Fijos ${money(c.fijos)}</span><span><i style="background:var(--sky)"></i>Variables ${money(c.vars)}</span><span><i style="background:var(--pink)"></i>Muertos ${money(c.muertos)}</span><span><i style="background:var(--mint)"></i>Ahorro ${money(c.ahorro)}</span></div>
+    <div class="legend"><span><i style="background:var(--lil)"></i>Fijos ${money(c.fijos)}</span><span><i style="background:var(--sky)"></i>Variables ${money(c.vars)}</span><span><i style="background:var(--pink)"></i>Gasto Hormiga ${money(c.muertos)}</span><span><i style="background:var(--mint)"></i>Ahorro ${money(c.ahorro)}</span></div>
     <div style="text-align:center;margin-top:12px"><span class="pill ${c.est}">${EST[c.est]}</span></div>
     ${pend>0?`<p style="text-align:center;font-size:12.5px;color:var(--grey);margin:12px 6px 0">Tienes <b>${money(pend)}</b> de fijos por pagar. Cuando los pagues te quedarán <b style="color:var(--pur)">${money(c.disp-pend)}</b> libres.</p>`:''}
   </div>
@@ -215,17 +215,17 @@ function viewHome(){
     <div class="mini" style="background:var(--skyL)"><small>Total gastado</small><b>${money(c.gastado)}</b></div>
     <div class="mini" style="background:var(--pinkL)"><small>Ahorro del ${PM()}</small><b>${money(c.ahorro)}</b></div>
   </div>
-  <h2>💸 Mis gastos muertos</h2>
+  <h2>💸 Mis Gastos Hormiga</h2>
   <div class="card">
     <div style="display:flex;justify-content:space-between;align-items:flex-end"><div><small style="color:var(--grey)">Este ${PM()}</small><div style="font-size:26px;font-weight:800;color:#B0435F">${money(c.muertos)}</div></div>
     <div style="text-align:right"><small style="color:var(--grey)">${pctM.toFixed(1)}% de tus ingresos<br>(tope ${S.cfg.tope}%)</small></div></div>
     <div class="bar"><i class="${pctM>S.cfg.tope?'over':''}" style="width:${Math.min(S.cfg.tope>0?pctM/S.cfg.tope*100:0,100)}%"></i></div>
     <div class="grid2" style="margin-top:12px">
       <div class="mini" style="background:#FFF6DD"><small>Si sigue así, al año</small><b>${money(c.muertos*12)}</b></div>
-      <div class="mini" style="background:var(--mintL)"><small>Días sin gasto muerto</small><b>${limpios} 🌿</b></div></div>
-    ${top?`<p style="font-size:13px;margin:12px 2px 0">Tu mayor fuga: <b>${catIcon(top[0])} ${esc(top[0])}</b> (${money(top[1])})</p>`:`<p class="empty" style="padding:10px 0 0">Aún no marcaste gastos muertos este ${PM()}. ¡Bien!</p>`}
+      <div class="mini" style="background:var(--mintL)"><small>Días sin Gasto Hormiga</small><b>${limpios} 🌿</b></div></div>
+    ${top?`<p style="font-size:13px;margin:12px 2px 0">Tu mayor fuga: <b>${catIcon(top[0])} ${esc(top[0])}</b> (${money(top[1])})</p>`:`<p class="empty" style="padding:10px 0 0">Aún no marcaste Gastos Hormiga este ${PM()}. ¡Bien!</p>`}
     <div class="days">${days}</div>
-    <small style="color:var(--grey);display:block;margin-top:8px">🟢 día limpio · 🔴 hubo gasto muerto</small>
+    <small style="color:var(--grey);display:block;margin-top:8px">🟢 Día limpio · 🔴 Hubo Gasto Hormiga</small>
   </div>
   <h2>🎀 Presupuesto por categoría</h2>
   <div class="card">${cats}<button class="btn sec" style="margin-top:10px" onclick="editCat(-1)">+ Nueva categoría</button></div>`
@@ -240,12 +240,12 @@ function viewMovs(){
   items.forEach(it=>{
     if(it.d!==last){html+=`<div style="font-size:12px;color:var(--grey);font-weight:700;margin:14px 4px 2px">${dayLabel(it.d)}</div>`;last=it.d}
     const x=it.x;
-    if(it.t==='gas')html+=`<div class="card" style="padding:4px 14px;margin:6px 0"><div class="row" onclick="openAdd('gasto','${x.id}')"><div class="ico" style="background:${x.tipo==='M'?'var(--pinkL)':'var(--lilL)'}">${catIcon(x.cat)}</div><div class="grow"><b>${esc(x.desc||x.cat)}</b><small>${esc(x.cat)} · ${x.tipo==='M'?'💸 Muerto':'Necesario'}</small></div><div class="amt neg">-${money(x.amt)}</div></div></div>`;
+    if(it.t==='gas')html+=`<div class="card" style="padding:4px 14px;margin:6px 0"><div class="row" onclick="openAdd('gasto','${x.id}')"><div class="ico" style="background:${x.tipo==='M'?'var(--pinkL)':'var(--lilL)'}">${catIcon(x.cat)}</div><div class="grow"><b>${esc(x.desc||x.cat)}</b><small>${esc(x.cat)} · ${x.tipo==='M'?'💸 Hormiga':'Necesario'}</small></div><div class="amt neg">-${money(x.amt)}</div></div></div>`;
     if(it.t==='ing')html+=`<div class="card" style="padding:4px 14px;margin:6px 0"><div class="row" onclick="openAdd('ingreso','${x.id}')"><div class="ico" style="background:var(--mintL)">💰</div><div class="grow"><b>${esc(x.desc||'Ingreso')}</b><small>Ingreso</small></div><div class="amt pos">+${money(x.amt)}</div></div></div>`;
     if(it.t==='aho'){const mt=S.metas.find(m=>m.id===x.meta);html+=`<div class="card" style="padding:4px 14px;margin:6px 0"><div class="row" onclick="openAdd('ahorro','${x.id}')"><div class="ico" style="background:var(--skyL)">🐷</div><div class="grow"><b>Ahorro</b><small>${esc(mt?mt.n:'Meta')}</small></div><div class="amt" style="color:var(--pur)">${money(x.amt,metaCur(x.meta))}</div></div></div>`}
   });
-  return`<div class="seg">${[['all','Todo'],['N','Necesarios'],['M','Muertos 💸']].map(([k,l])=>`<button class="${f===k?'on':''}" onclick="ui.filter='${k}';render()">${l}</button>`).join('')}</div>
-  <div class="tot"><span>Gastos del ${PM()}: <b>${money(c.vars+c.muertos)}</b></span><span>Muertos: <b style="color:#B0435F">${money(c.muertos)}</b></span></div>
+  return`<div class="seg">${[['all','Todo'],['N','Necesarios'],['M','Hormiga 💸']].map(([k,l])=>`<button class="${f===k?'on':''}" onclick="ui.filter='${k}';render()">${l}</button>`).join('')}</div>
+  <div class="tot"><span>Gastos del ${PM()}: <b>${money(c.vars+c.muertos)}</b></span><span>Hormiga: <b style="color:#B0435F">${money(c.muertos)}</b></span></div>
   ${html||'<div class="empty">Aún no hay movimientos este '+PM()+'.<br>Toca el botón <b>+</b> para anotar el primero 🌸</div>'}`
 }
 function viewFijos(){
@@ -363,7 +363,7 @@ function openAdd(kind,id,metaId){
   if(kind==='gasto')body+=`<label>¿En qué fue?</label><input id="f_desc" placeholder="Ej. Delivery, taxi, café…" value="${esc(item?item.desc:'')}">
     <button class="mic" id="micb" onclick="doVoice()">🎙️ Dictar con la voz</button>
     <label>Categoría</label><div class="chips" id="catchips"></div>
-    <label>Tipo de gasto</label><div class="chips"><button class="chip n" id="t_N" onclick="setTipo('N')">✅ Necesario</button><button class="chip m" id="t_M" onclick="setTipo('M')">💸 Muerto (impulso / hormiga)</button></div>`;
+    <label>Tipo de gasto</label><div class="chips"><button class="chip n" id="t_N" onclick="setTipo('N')">✅ Necesario</button><button class="chip m" id="t_M" onclick="setTipo('M')">💸 Gasto Hormiga (impulso)</button></div>`;
   if(kind==='ingreso')body+=`<label>Descripción</label><input id="f_desc" placeholder="Sueldo, extra…" value="${esc(item?item.desc:'')}">`;
   if(kind==='ahorro')body+=`<label>Meta (el aporte se guarda en la moneda de la meta)</label><select id="f_meta">${S.metas.map(m=>`<option value="${m.id}" ${m.id===FM.meta?'selected':''}>${esc(m.n)}</option>`).join('')}</select>`;
   body+=`<label>Fecha</label>${dateField('f_date',date)}`;
@@ -461,7 +461,7 @@ function togReto(n){S.reto[n]=!S.reto[n];save();render()}
 function openSettings(){
   sheet(`<h3>⚙️ Ajustes</h3>
   <div class="two"><div><label>Símbolo de moneda</label><input id="s_c" value="${esc(S.cfg.cur)}"></div><div><label>Meta de ahorro (%)</label><input id="s_m" inputmode="numeric" value="${S.cfg.meta}"></div></div>
-  <label>Tope de gastos muertos (% de tus ingresos)</label><input id="s_t" inputmode="numeric" value="${S.cfg.tope}">
+  <label>Tope de Gastos Hormiga (% de tus ingresos)</label><input id="s_t" inputmode="numeric" value="${S.cfg.tope}">
   <label>Mi periodo empieza el día</label><select id="s_pd">${Array.from({length:28},(_,k)=>k+1).map(d=>`<option value="${d}" ${d===PD()?'selected':''}>${d===1?'1 (mes calendario)':d}</option>`).join('')}</select>
   <p style="font-size:12px;color:var(--grey);margin:6px 2px 0">Si te pagan el 25, elige 25: tu periodo irá del 25 al 24 del mes siguiente y los ingresos y gastos se cuentan dentro de ese rango.</p>
   <button class="btn" style="margin-top:14px" onclick="saveCfg()">Guardar ajustes</button>
@@ -477,7 +477,7 @@ function openSettings(){
   <input id="impc" type="file" accept=".csv,text/csv,text/plain" style="display:none" onchange="importCSVFile(this)">
   <button class="btn del" style="margin-top:10px" onclick="if(confirm('¿Borrar TODOS tus datos?')){S=fresh();save();closeSheet();render()}">Borrar todo</button>
   <p style="font-size:12px;color:var(--grey);margin:16px 2px 0">📲 Para usarla como app: en Chrome abre el menú ⋮ → <b>Añadir a pantalla de inicio</b>. En iPhone (Safari): Compartir → <b>Añadir a inicio</b>.</p>
-  <p style="font-size:12px;color:var(--grey);text-align:center;margin:14px 0 0">HomeCount v1.0.12</p>`)
+  <p style="font-size:12px;color:var(--grey);text-align:center;margin:14px 0 0">HomeCount v1.0.13</p>`)
 }
 function saveCfg(){S.cfg.cur=val('s_c')||'S/';S.cfg.meta=parseFloat(val('s_m'))||0;S.cfg.tope=parseFloat(val('s_t'))||0;S.cfg.pday=parseInt(val('s_pd'))||1;ui.ym=ymOf(todayStr());save();closeSheet();render();toast('Ajustes guardados')}
 const isWV=()=>/; wv\)/.test(navigator.userAgent);
@@ -490,7 +490,7 @@ function dl(name,text,type){
   const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500)}
 function exportJSON(){dl('respaldo_finanzas_'+todayStr()+'.json',JSON.stringify(S),'application/json')}
 function exportCSV(){const q=s=>'"'+String(s==null?'':s).replace(/"/g,'""')+'"';
-  const rows=['Fecha,Concepto,Monto,Categoria,Tipo'].concat(S.gas.sort((a,b)=>a.date.localeCompare(b.date)).map(x=>[x.date,q(x.desc),x.amt,q(x.cat),x.tipo==='M'?'Muerto':'Necesario'].join(',')));
+  const rows=['Fecha,Concepto,Monto,Categoria,Tipo'].concat(S.gas.sort((a,b)=>a.date.localeCompare(b.date)).map(x=>[x.date,q(x.desc),x.amt,q(x.cat),x.tipo==='M'?'Hormiga':'Necesario'].join(',')));
   dl('gastos_'+todayStr()+'.csv','﻿'+rows.join('\n'),'text/csv')}
 function applyImport(txt){try{const d=JSON.parse(txt);if(!d.cfg||!d.gas)throw 0;S=d;save();closeSheet();ui.ym=ymOf(todayStr());render();toast('Datos importados ✨')}catch(e){toast('Ese texto no es un respaldo válido')}}
 function importJSON(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=()=>applyImport(r.result);r.readAsText(f)}
@@ -522,7 +522,7 @@ function importCSVText(txt){
     if(!cat)cat=(S.cats.find(c=>c.n==='Otros')||S.cats[0]).n;
     const ex=S.cats.find(c=>c.n.toLowerCase()===cat.toLowerCase());
     if(ex)cat=ex.n;else{S.cats.push({n:cat,i:'✨',b:0});newCats++}
-    const tp=iT>=0?norm(r[iT]||''):'',tipo=(tp==='muerto'||tp==='m')?'M':'N';
+    const tp=iT>=0?norm(r[iT]||''):'',tipo=(tp==='muerto'||tp==='hormiga'||tp==='m')?'M':'N';
     const key=[date,amt,desc,cat].join('|');if(seen.has(key)){dup++;return}
     seen.add(key);S.gas.push({id:uid(),amt,desc,cat,tipo,date});add++});
   save();closeSheet();ui.ym=ymOf(todayStr());render();
